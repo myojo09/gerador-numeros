@@ -1,0 +1,548 @@
+/* ===================================================================
+   GERADOR DE NÚMEROS IUM — Wealth Number Generator
+   Tema: Luxo Moderno / Wealth Lifestyle
+   =================================================================== */
+
+/* -------------------------------------------------------------------
+   1. RESET
+   ------------------------------------------------------------------- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+/* -------------------------------------------------------------------
+   2. TOKENS DE DESIGN — paleta, tipografia, espaçamento, transições
+   ------------------------------------------------------------------- */
+:root {
+  /* Paleta */
+  --c-black: #0A0A0A;
+  --c-graphite: #1A1A1A;
+  --c-graphite-soft: #242322;
+  --c-gold: #D4AF37;
+  --c-gold-light: #F1D98B;
+  --c-gold-dark: #8A6A1F;
+  --c-white: #F5F5F5;
+  --c-white-dim: rgba(245, 245, 245, 0.68);
+  --c-white-faint: rgba(245, 245, 245, 0.4);
+  --c-error: #C97B63;
+
+  /* Vidro / glassmorphism */
+  --glass-bg: rgba(20, 19, 18, 0.46);
+  --glass-border: rgba(212, 175, 55, 0.28);
+  --glass-blur: 22px;
+
+  /* Tipografia */
+  --font-display: "Playfair Display", "Times New Roman", serif;
+  --font-body: "Montserrat", "Helvetica Neue", Arial, sans-serif;
+
+  /* Transições */
+  --ease-lux: cubic-bezier(0.22, 1, 0.36, 1);
+  --t-fast: 300ms;
+  --t-medium: 600ms;
+}
+
+/* -------------------------------------------------------------------
+   3. BASE
+   ------------------------------------------------------------------- */
+body {
+  min-height: 100vh;
+  background-color: var(--c-black);
+  font-family: var(--font-body);
+  color: var(--c-white);
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* -------------------------------------------------------------------
+   4. CENÁRIO DE FUNDO — céu, lua, estrelas, skyline ilustrado
+   ------------------------------------------------------------------- */
+.scene {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  overflow: hidden;
+}
+
+.sky {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 40% at 78% 18%, rgba(212, 175, 55, 0.07), transparent 70%),
+    linear-gradient(180deg, #050505 0%, #0d0d0d 38%, #161514 64%, #1c1a17 100%);
+}
+
+.moon {
+  position: absolute;
+  top: 11%;
+  right: 16%;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #fbf6e6, #f1d98b 55%, #c9a84f 100%);
+  box-shadow: 0 0 50px 14px rgba(241, 217, 139, 0.22), 0 0 110px 40px rgba(212, 175, 55, 0.08);
+  animation: moonGlow 6s ease-in-out infinite;
+}
+
+.stars {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.star {
+  position: absolute;
+  background: var(--c-gold-light);
+  border-radius: 50%;
+  opacity: 0.5;
+  animation: twinkle 4s ease-in-out infinite;
+}
+
+.skyline {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 58vh;
+  min-height: 380px;
+  display: block;
+}
+
+.skyline .mountains { fill: #141414; opacity: 0.55; }
+.skyline .ground { fill: #15140f; }
+
+.skyline .palm path {
+  fill: none;
+  stroke: #161616;
+  stroke-width: 6;
+  stroke-linecap: round;
+  opacity: 0.55;
+}
+
+.skyline .pool rect.reflection {
+  fill: var(--c-gold-light);
+  opacity: 0.18;
+  animation: shimmer 5s ease-in-out infinite;
+}
+.skyline .pool .r1 { animation-delay: 0s; }
+.skyline .pool .r2 { animation-delay: 0.6s; }
+.skyline .pool .r3 { animation-delay: 1.2s; }
+.skyline .pool .r4 { animation-delay: 1.8s; }
+.skyline .pool .r5 { animation-delay: 2.4s; }
+.skyline .pool .r6 { animation-delay: 3s; }
+
+.skyline .car .headlight { opacity: 0.85; }
+
+.vignette {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 120% 90% at 50% 38%, transparent 35%, rgba(10, 10, 10, 0.55) 78%, rgba(10, 10, 10, 0.92) 100%),
+    linear-gradient(180deg, rgba(10, 10, 10, 0.35) 0%, rgba(10, 10, 10, 0.25) 30%, rgba(10, 10, 10, 0.6) 70%, rgba(10, 10, 10, 0.88) 100%);
+}
+
+/* -------------------------------------------------------------------
+   5. LAYOUT PRINCIPAL
+   ------------------------------------------------------------------- */
+.stage {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(22px, 4vh, 38px);
+  padding: 48px 20px 32px;
+}
+
+/* -------------------------------------------------------------------
+   6. BLOCO DE MARCA — eyebrow + tagline
+   ------------------------------------------------------------------- */
+.brand-block {
+  text-align: center;
+  animation: fadeInUp var(--t-medium) var(--ease-lux) both;
+}
+
+.eyebrow {
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 3.2px;
+  text-transform: uppercase;
+  color: var(--c-gold);
+  margin-bottom: 8px;
+}
+
+.tagline {
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-style: italic;
+  font-size: 13.5px;
+  letter-spacing: 0.4px;
+  color: var(--c-white-faint);
+}
+
+/* -------------------------------------------------------------------
+   7. CARD — glassmorphism
+   ------------------------------------------------------------------- */
+.card {
+  width: min(440px, 100%);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 26px;
+  backdrop-filter: blur(var(--glass-blur)) saturate(135%);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(135%);
+  box-shadow:
+    0 30px 70px -20px rgba(0, 0, 0, 0.75),
+    0 0 0 1px rgba(255, 255, 255, 0.03) inset,
+    0 1px 0 rgba(245, 245, 245, 0.06) inset;
+  padding: clamp(32px, 5vw, 48px) clamp(26px, 6vw, 42px) 38px;
+  text-align: center;
+  animation: scaleIn var(--t-medium) var(--ease-lux) both;
+  animation-delay: 120ms;
+}
+
+.card-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1.7rem, 4.4vw, 2.35rem);
+  line-height: 1.18;
+  color: var(--c-white);
+  letter-spacing: 0.3px;
+}
+
+.card-title span {
+  display: block;
+  font-style: italic;
+  font-weight: 900;
+  background: linear-gradient(100deg, var(--c-gold-dark), var(--c-gold) 45%, var(--c-gold-light) 75%, var(--c-gold));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.card-subtitle {
+  margin-top: 10px;
+  font-size: 13.5px;
+  font-weight: 400;
+  color: var(--c-white-dim);
+  line-height: 1.55;
+}
+
+/* -------------------------------------------------------------------
+   8. FORMULÁRIO
+   ------------------------------------------------------------------- */
+.form {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.field {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 4px 4px 4px 18px;
+  border: 1px solid rgba(212, 175, 55, 0.18);
+  border-radius: 14px;
+  background: rgba(10, 10, 10, 0.28);
+  transition: border-color var(--t-fast) var(--ease-lux), background var(--t-fast) var(--ease-lux);
+}
+
+.field:focus-within {
+  border-color: rgba(212, 175, 55, 0.65);
+  background: rgba(10, 10, 10, 0.4);
+}
+
+.field label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  color: var(--c-white-dim);
+  white-space: nowrap;
+}
+
+.field input {
+  flex: 0 0 108px;
+  width: 108px;
+  text-align: right;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: var(--font-body);
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--c-gold-light);
+  padding: 13px 14px;
+  border-left: 1px solid rgba(245, 245, 245, 0.1);
+}
+
+.field input:focus-visible {
+  outline: 2px solid var(--c-gold);
+  outline-offset: -2px;
+  border-radius: 8px;
+}
+
+/* remove setas nativas do input number */
+.field input::-webkit-outer-spin-button,
+.field input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.field input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+.field.field-error {
+  border-color: rgba(201, 123, 99, 0.7);
+  animation: shake 420ms var(--ease-lux);
+}
+
+.error-message {
+  min-height: 16px;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--c-error);
+  letter-spacing: 0.2px;
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: opacity var(--t-fast) var(--ease-lux), transform var(--t-fast) var(--ease-lux);
+}
+
+.error-message.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* -------------------------------------------------------------------
+   9. BOTÃO — GERAR NÚMERO
+   ------------------------------------------------------------------- */
+.generate-btn {
+  position: relative;
+  margin-top: 8px;
+  padding: 17px 24px;
+  border: 1px solid var(--c-gold);
+  border-radius: 14px;
+  background: linear-gradient(135deg, var(--c-gold-dark), var(--c-gold) 50%, var(--c-gold-dark));
+  color: var(--c-black);
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 2.6px;
+  text-transform: uppercase;
+  cursor: pointer;
+  overflow: hidden;
+  transition: transform var(--t-fast) var(--ease-lux), box-shadow var(--t-fast) var(--ease-lux), filter var(--t-fast) var(--ease-lux);
+  box-shadow: 0 14px 30px -12px rgba(212, 175, 55, 0.45);
+}
+
+.generate-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 18px 38px -10px rgba(212, 175, 55, 0.65);
+  filter: brightness(1.06);
+}
+
+.generate-btn:active {
+  transform: translateY(0px) scale(0.985);
+}
+
+.generate-btn:focus-visible {
+  outline: 2px solid var(--c-white);
+  outline-offset: 3px;
+}
+
+.generate-btn:disabled {
+  cursor: default;
+  filter: saturate(0.7) brightness(0.92);
+}
+
+.btn-label {
+  position: relative;
+  z-index: 1;
+}
+
+.btn-shine {
+  position: absolute;
+  top: 0;
+  left: -60%;
+  width: 40%;
+  height: 100%;
+  background: linear-gradient(115deg, transparent, rgba(255, 255, 255, 0.55), transparent);
+  transform: skewX(-18deg);
+  pointer-events: none;
+}
+
+.generate-btn:hover .btn-shine {
+  animation: btnShine 900ms var(--ease-lux);
+}
+
+/* -------------------------------------------------------------------
+   10. RESULTADO
+   ------------------------------------------------------------------- */
+.result-wrap {
+  position: relative;
+  margin-top: 34px;
+  display: flex;
+  justify-content: center;
+}
+
+.result-frame {
+  position: relative;
+  min-width: 168px;
+  padding: 14px 30px;
+  border: 1px solid rgba(212, 175, 55, 0.4);
+  border-radius: 16px;
+  background: rgba(10, 10, 10, 0.3);
+}
+
+.result-number {
+  display: inline-block;
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(56px, 11vw, 92px);
+  line-height: 1;
+  letter-spacing: 1px;
+  color: var(--c-gold);
+  text-shadow:
+    0 0 14px rgba(212, 175, 55, 0.55),
+    0 0 38px rgba(212, 175, 55, 0.35),
+    0 0 80px rgba(212, 175, 55, 0.18);
+}
+
+.result-number.is-cycling {
+  color: var(--c-gold-light);
+  opacity: 0.85;
+}
+
+.result-number.is-settling {
+  animation: settle 620ms var(--ease-lux);
+}
+
+.particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.particle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--c-gold-light);
+  box-shadow: 0 0 6px 1px rgba(241, 217, 139, 0.8);
+  animation: particleBurst 900ms var(--ease-lux) forwards;
+}
+
+/* -------------------------------------------------------------------
+   11. RODAPÉ
+   ------------------------------------------------------------------- */
+.footer {
+  text-align: center;
+  font-size: 11px;
+  letter-spacing: 1px;
+  color: var(--c-white-faint);
+  animation: fadeInUp var(--t-medium) var(--ease-lux) both;
+  animation-delay: 260ms;
+}
+
+/* -------------------------------------------------------------------
+   12. ANIMAÇÕES
+   ------------------------------------------------------------------- */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.94) translateY(10px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.15; }
+  50%      { opacity: 0.9; }
+}
+
+@keyframes moonGlow {
+  0%, 100% { box-shadow: 0 0 50px 14px rgba(241, 217, 139, 0.22), 0 0 110px 40px rgba(212, 175, 55, 0.08); }
+  50%      { box-shadow: 0 0 60px 18px rgba(241, 217, 139, 0.3), 0 0 130px 50px rgba(212, 175, 55, 0.12); }
+}
+
+@keyframes shimmer {
+  0%, 100% { opacity: 0.1; transform: scaleX(1); }
+  50%      { opacity: 0.4; transform: scaleX(1.04); }
+}
+
+@keyframes btnShine {
+  from { left: -60%; }
+  to   { left: 130%; }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%      { transform: translateX(-6px); }
+  40%      { transform: translateX(5px); }
+  60%      { transform: translateX(-4px); }
+  80%      { transform: translateX(3px); }
+}
+
+@keyframes settle {
+  0%   { transform: scale(0.82); }
+  55%  { transform: scale(1.08); }
+  100% { transform: scale(1); }
+}
+
+@keyframes particleBurst {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) translate(0, 0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) translate(var(--px), var(--py)) scale(0.3);
+  }
+}
+
+/* -------------------------------------------------------------------
+   13. RESPONSIVO
+   ------------------------------------------------------------------- */
+@media (max-width: 560px) {
+  .stage { padding: 36px 16px 26px; gap: 24px; }
+  .card { border-radius: 22px; padding: 30px 20px 32px; }
+  .field { padding-left: 14px; }
+  .field input { flex-basis: 92px; width: 92px; font-size: 16px; }
+  .result-frame { min-width: 140px; padding: 10px 22px; }
+  .skyline { height: 46vh; }
+}
+
+@media (max-width: 360px) {
+  .field label { font-size: 10px; letter-spacing: 1.2px; }
+  .field input { flex-basis: 80px; width: 80px; }
+}
+
+@media (max-height: 700px) and (min-width: 561px) {
+  .skyline { height: 40vh; }
+}
+
+/* -------------------------------------------------------------------
+   14. ACESSIBILIDADE — movimento reduzido
+   ------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

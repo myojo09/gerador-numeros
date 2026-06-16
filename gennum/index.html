@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gerador de Número · Wealth Number Generator</title>
+  <meta name="description" content="Defina um intervalo e descubra seu próximo número da sorte. Uma experiência exclusiva de geração de números." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,700;0,900;1,500&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ================= CENÁRIO DE FUNDO ================= -->
+  <!-- Skyline noturno ilustrado: mansão moderna, piscina infinita e supercarro.
+       Construído inteiramente em CSS + SVG para garantir nitidez em qualquer tela. -->
+  <div class="scene" aria-hidden="true">
+    <div class="sky"></div>
+    <div class="moon"></div>
+    <div class="stars" id="stars"></div>
+
+    <svg class="skyline" viewBox="0 0 1600 700" preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="goldGrad" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stop-color="#8A6A1F" />
+          <stop offset="50%" stop-color="#D4AF37" />
+          <stop offset="100%" stop-color="#F1D98B" />
+        </linearGradient>
+        <linearGradient id="poolGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#0C0C0C" />
+          <stop offset="100%" stop-color="#1C1C1C" />
+        </linearGradient>
+        <radialGradient id="windowGlow" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#F1D98B" stop-opacity="0.95" />
+          <stop offset="100%" stop-color="#D4AF37" stop-opacity="0.12" />
+        </radialGradient>
+        <filter id="softGlow" x="-60%" y="-60%" width="220%" height="220%">
+          <feGaussianBlur stdDeviation="7" result="blur" />
+          <feMerge>
+            <feMergeNode in="blur" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
+      </defs>
+
+      <!-- Montanhas distantes -->
+      <path class="mountains" d="M0,470 L130,400 260,445 380,385 520,435 670,390 810,425 960,375 1110,415 1260,380 1410,425 1600,400 L1600,700 L0,700 Z" />
+
+      <!-- Terreno / terraço -->
+      <path class="ground" d="M0,565 C260,520 1340,520 1600,565 L1600,700 L0,700 Z" />
+
+      <!-- Palmeiras decorativas -->
+      <g class="palm palm-left">
+        <path d="M95,560 C92,520 100,485 90,455" />
+        <path d="M90,470 C70,450 50,448 30,460" />
+        <path d="M90,465 C75,438 78,420 65,400" />
+        <path d="M92,468 C108,448 128,446 148,460" />
+        <path d="M92,462 C104,436 100,418 112,398" />
+      </g>
+      <g class="palm palm-right">
+        <path d="M1505,560 C1502,520 1510,485 1500,455" />
+        <path d="M1500,470 C1480,450 1460,448 1440,460" />
+        <path d="M1500,465 C1485,438 1488,420 1475,400" />
+        <path d="M1502,468 C1518,448 1538,446 1558,460" />
+        <path d="M1502,462 C1514,436 1510,418 1522,398" />
+      </g>
+
+      <!-- Brilho ambiente vindo da mansão -->
+      <ellipse class="ambient-glow" cx="1010" cy="470" rx="320" ry="90" fill="url(#windowGlow)" filter="url(#softGlow)" opacity="0.25" />
+
+      <!-- Piscina infinita -->
+      <g class="pool">
+        <line x1="430" y1="540" x2="1190" y2="540" stroke="url(#goldGrad)" stroke-width="2" opacity="0.55" />
+        <rect x="430" y="540" width="760" height="70" rx="10" fill="url(#poolGrad)" stroke="#D4AF37" stroke-width="1" stroke-opacity="0.3" />
+        <rect class="reflection r1" x="470" y="556" width="140" height="2" rx="1" />
+        <rect class="reflection r2" x="650" y="568" width="220" height="2" rx="1" />
+        <rect class="reflection r3" x="520" y="580" width="100" height="2" rx="1" />
+        <rect class="reflection r4" x="900" y="560" width="170" height="2" rx="1" />
+        <rect class="reflection r5" x="780" y="592" width="260" height="2" rx="1" />
+        <rect class="reflection r6" x="1000" y="578" width="120" height="2" rx="1" />
+      </g>
+
+      <!-- Mansão moderna -->
+      <g class="mansion">
+        <rect x="800" y="328" width="420" height="14" fill="#1A1A1A" />
+        <rect x="800" y="328" width="420" height="3" fill="url(#goldGrad)" />
+        <rect x="820" y="344" width="380" height="192" fill="#141414" />
+        <line x1="800" y1="344" x2="1220" y2="344" stroke="#D4AF37" stroke-width="1" opacity="0.3" />
+
+        <!-- Janelas iluminadas -->
+        <rect class="window" x="836" y="362" width="44" height="46" fill="url(#windowGlow)" opacity="0.85" />
+        <rect class="window" x="898" y="362" width="44" height="46" fill="url(#windowGlow)" opacity="0.55" />
+        <rect class="window" x="960" y="362" width="44" height="46" fill="url(#windowGlow)" opacity="0.75" />
+        <rect class="window" x="1022" y="362" width="44" height="46" fill="url(#windowGlow)" opacity="0.4" />
+        <rect class="window" x="1084" y="362" width="44" height="46" fill="url(#windowGlow)" opacity="0.7" />
+
+        <rect class="window" x="836" y="428" width="44" height="46" fill="url(#windowGlow)" opacity="0.5" />
+        <rect class="window" x="898" y="428" width="44" height="46" fill="url(#windowGlow)" opacity="0.8" />
+        <rect class="window" x="960" y="428" width="44" height="46" fill="url(#windowGlow)" opacity="0.45" />
+        <rect class="window" x="1022" y="428" width="44" height="46" fill="url(#windowGlow)" opacity="0.65" />
+        <rect class="window" x="1084" y="428" width="44" height="46" fill="url(#windowGlow)" opacity="0.5" />
+
+        <!-- Pilares da entrada -->
+        <rect x="930" y="536" width="9" height="36" fill="#1A1A1A" />
+        <rect x="1011" y="536" width="9" height="36" fill="#1A1A1A" />
+      </g>
+
+      <!-- Supercarro -->
+      <g class="car">
+        <line x1="566" y1="519" x2="754" y2="519" stroke="url(#goldGrad)" stroke-width="1" opacity="0.5" />
+        <path d="M560,544 C560,524 580,514 606,512 L640,499 C656,493 682,493 702,499 L736,512 C753,514 761,524 761,538 L761,544 Z" fill="#1A1A1A" stroke="url(#goldGrad)" stroke-width="1" stroke-opacity="0.4" />
+        <ellipse class="headlight" cx="756" cy="520" rx="6" ry="3" fill="#F1D98B" filter="url(#softGlow)" />
+        <circle cx="601" cy="544" r="13" fill="#0A0A0A" stroke="url(#goldGrad)" stroke-width="2" />
+        <circle cx="601" cy="544" r="4" fill="#D4AF37" />
+        <circle cx="722" cy="544" r="13" fill="#0A0A0A" stroke="url(#goldGrad)" stroke-width="2" />
+        <circle cx="722" cy="544" r="4" fill="#D4AF37" />
+      </g>
+    </svg>
+
+    <div class="vignette"></div>
+  </div>
+
+  <!-- ================= CONTEÚDO PRINCIPAL ================= -->
+  <main class="stage">
+
+    <header class="brand-block">
+      <p class="eyebrow">💎 Wealth Number Generator</p>
+      <p class="tagline">Ferramenta exclusiva para decisões, sorteios e oportunidades.</p>
+    </header>
+
+    <section class="card" id="card">
+
+      <h1 class="card-title">Gerador de Números <span>Premium</span></h1>
+      <p class="card-subtitle">Defina um intervalo e descubra seu próximo número da sorte.</p>
+
+      <form class="form" id="generator-form" novalidate>
+
+        <div class="field">
+          <label for="min-value">Valor Mínimo</label>
+          <input type="number" id="min-value" name="min" value="0" inputmode="numeric" autocomplete="off" />
+        </div>
+
+        <div class="field">
+          <label for="max-value">Valor Máximo</label>
+          <input type="number" id="max-value" name="max" value="100" inputmode="numeric" autocomplete="off" />
+        </div>
+
+        <p class="error-message" id="error-message" role="alert" aria-live="polite"></p>
+
+        <button type="submit" class="generate-btn" id="generate-btn">
+          <span class="btn-label">Gerar Número</span>
+          <span class="btn-shine" aria-hidden="true"></span>
+        </button>
+      </form>
+
+      <div class="result-wrap">
+        <div class="result-frame" id="result-frame">
+          <span class="result-number" id="result-number">—</span>
+        </div>
+        <div class="particles" id="particles" aria-hidden="true"></div>
+      </div>
+
+    </section>
+
+    <footer class="footer">
+      <p>© 2026 Premium Lifestyle Experience</p>
+    </footer>
+
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

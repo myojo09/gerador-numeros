@@ -4,7 +4,7 @@ Aplicação inspirada no lifestyle de luxo para geração de números aleatório
 
 ## 🚀 Demonstração
 
-https://myojo09.github.io/gerador-numeros-premium/
+https://myojo09.github.io/gerador-numeros/
 
 ## Tecnologias
 
